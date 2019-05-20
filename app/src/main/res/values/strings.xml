@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MCS_Driver</string>
+    <string name="driver">Driver</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="ReqTrip">RequestedTrips</string>
+    <string name="trips">Trips</string>
+    <string name="availability">Availability</string>
+    <string name="assigned">Assigned</string>
+    <string name="carNamePass">CarNamePass</string>
+    <string name="vehicle_number">Vehicle Number</string>
+    <string name="vehName">VehName</string>
+</resources>

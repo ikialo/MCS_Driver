@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:weightSum="500"
+    tools:context=".MapsActivity"  android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_weight="50"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp" />
+
+
+
+
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/centerMark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_weight="112"
+        android:textSize="15sp"
+        android:id="@+id/oriName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/desName"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        android:hint="Origin" />
+    <TextView
+        android:layout_weight="112"
+
+        android:textSize="15sp"
+        android:gravity="center"
+        android:id="@+id/desName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/acceptTrip"
+        android:layout_marginBottom="5dp"
+        android:hint="Destination" />
+
+
+    <Button
+        android:layout_weight="115"
+
+
+        android:text="Accept Trip"
+        android:id="@+id/acceptTrip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dp" />
+    <Button
+        android:layout_weight="115"
+
+
+        android:text="Check List of Trips"
+        android:id="@+id/checkTrip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dp" />
+
+
+
+</LinearLayout>
+
