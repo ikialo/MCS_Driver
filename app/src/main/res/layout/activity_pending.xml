@@ -8,6 +8,12 @@
     tools:context="com.MCS_Software.app.mcs_driver.PendingActivity">
 
 
+    <TextView
+        android:gravity="center"
+        android:text="Trips To Complete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewPending"
         android:layout_width="match_parent"

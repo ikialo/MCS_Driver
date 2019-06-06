@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -37,7 +36,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class TrackingService extends Service {
+public class AssignListenerService extends Service {
+
+
+    public AssignListenerService() {
+    }
+
+
     private static final String TAG = TrackingService.class.getSimpleName();
 
 
@@ -55,8 +60,8 @@ public class TrackingService extends Service {
         sharedPreferences = getSharedPreferences(getString(R.string.carNamePass),MODE_PRIVATE);
 
         // startForeground(101, getNotification());
-        buildNotification("My_service","my_background_service","Determining Metro Driver Location");
-        requestLocationUpdates();
+       // buildNotification("My_service","my_background_service","Determining Metro Driver Location");
+       // requestLocationUpdates();
 
         readAssign();
     }
@@ -141,21 +146,9 @@ public class TrackingService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String createNotificationChannelId(String channelid, String channelName) {
 
-
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-
         NotificationChannel chan = new NotificationChannel(channelid, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.YELLOW);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        chan.canShowBadge();
-        chan.enableVibration(true);
-        chan.setSound(alarmSound,
-                new AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .setFlags(AudioAttributes.USAGE_NOTIFICATION)
-                        .build());
-        chan.setImportance(NotificationManager.IMPORTANCE_HIGH);
 
         NotificationManager service =  getSystemService(NotificationManager.class);
 
@@ -177,7 +170,7 @@ public class TrackingService extends Service {
 //Stop the Service//
 
             //
-            stopSelf();
+          //  stopSelf();
         }
     };
 

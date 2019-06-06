@@ -55,10 +55,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        sp_tripInfo.edit().putString(getString(R.string.tripID),"tripid").apply();
+
+        sp_tripInfo.edit().putBoolean(getString(R.string.enablePick), false).apply();
+
+
         listCar = new ArrayList<>();
-        listCar.add("CBC 461");
-        listCar.add("CAR 123");
-        listCar.add("BAC 321");
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference(getString(R.string.vehicles));
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                listCar.clear();
+                for (DataSnapshot post : dataSnapshot.getChildren()){
+
+
+                    listCar.add(post.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(getString(R.string.driver));
 
@@ -108,9 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
                        // creatPendingDB(position,Car,driver1);
 
+                        Toast.makeText(MainActivity.this, "IN OK", Toast.LENGTH_SHORT).show();
 
 
-                        if (driver1.getText().toString().equals("mine")) {
+                        if (driver1.getText().toString().trim().equals("mine")) {
                             Toast.makeText(MainActivity.this, driver1.getText().toString(), Toast.LENGTH_SHORT).show();
 
                             check =  listCar.toArray(new String[listCar.size()]);
@@ -134,20 +157,28 @@ public class MainActivity extends AppCompatActivity {
 
         final boolean[] checkUser = {false};
 
+        Log.d("testLogin1", "onClick: "+ vehicleNumber.getText().toString());
+
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                Log.d("testLogin2", "onClick: "+ vehicleNumber.getText().toString());
+
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
 
-                    if (postSnapshot.child("Name").getValue().equals(user.getText().toString().trim())
+                    if (postSnapshot.child("UserName").getValue().equals(user.getText().toString().trim())
                     && postSnapshot.child("Password").getValue().toString().equals(pass.getText().toString().trim())){
 
                         Toast.makeText(MainActivity.this, "SIGNED IN", Toast.LENGTH_SHORT).show();
 
                         checkUser[0] = true;
 
+                        sp_tripInfo.edit().putString(getString(R.string.driverName),postSnapshot.child("Name").getValue().toString()).apply();
+
+
                         mDatabaseRef.child(postSnapshot.getKey()).child(getString(R.string.availability)).setValue("true");
+                        finish();
                         startActivity(new Intent(MainActivity.this, MapsActivity.class));
                         break;
 
@@ -159,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "USERNAME or PASSWORD INCORRECT", Toast.LENGTH_SHORT).show();
                 }
 
-                finish();
+
 
             }
 
@@ -248,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        vehicleNumber.setText(sp_tripInfo.getString(getString(R.string.vehName), "Na"));
+        vehicleNumber.setText(sp_tripInfo.getString(getString(R.string.vehName), getString(R.string.vehicle_number)));
 
     }
 

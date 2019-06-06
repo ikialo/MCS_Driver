@@ -34,7 +34,7 @@ List<RequestedInfo> mNameDB;
     public void onBindViewHolder(@NonNull PendingViewHolder pendingViewHolder, int i) {
 
         pendingViewHolder.clientNames.setText(mNameDB.get(i).getName());
-        pendingViewHolder.date.setText(mNameDB.get(i).getDate());
+        pendingViewHolder.date.setText(mNameDB.get(i).getTime());
         pendingViewHolder.des.setText(mNameDB.get(i).getDestin());
         pendingViewHolder.ori.setText(mNameDB.get(i).getOrigin());
     }

@@ -8,72 +8,71 @@
     tools:context=".MapsActivity"  android:layout_height="match_parent">
 
 
+
+
+
     <RelativeLayout
-        android:layout_weight="50"
+        android:padding="5dp"
+
+        android:layout_marginTop="2dp"
+        android:background="@drawable/background_map"
+        android:layout_weight="70"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
         <fragment
             android:id="@+id/map"
+
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp" />
+            android:layout_marginTop="0dp"
+            android:background="@drawable/background_map" />
 
-
-
-
-
-        <ImageView
-            android:layout_centerInParent="true"
-            android:id="@+id/centerMark"
+        <TextView
+            android:background="@drawable/background_map"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/clientTripInfo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/map"
+            android:layout_alignEnd="@+id/map"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:gravity="center"
+            android:text="Plate Number"
+            android:textSize="17sp" />
 
 
     </RelativeLayout>
 
 
-    <TextView
-        android:layout_weight="112"
-        android:textSize="15sp"
-        android:id="@+id/oriName"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/desName"
-        android:gravity="center"
-        android:layout_marginBottom="5dp"
-        android:hint="Origin" />
-    <TextView
-        android:layout_weight="112"
-
-        android:textSize="15sp"
-        android:gravity="center"
-        android:id="@+id/desName"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/acceptTrip"
-        android:layout_marginBottom="5dp"
-        android:hint="Destination" />
-
 
     <Button
-        android:layout_weight="115"
-
-
-        android:text="Accept Trip"
-        android:id="@+id/acceptTrip"
+        android:layout_weight="225"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/custom_button"
+        android:text="Picked Up"
+        android:id="@+id/picked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="6dp" />
     <Button
-        android:layout_weight="115"
-
-
+        android:layout_weight="225"
+        android:background="@drawable/custom_button"
+        android:visibility="gone"
+        android:text="Dropped OFF"
+        android:id="@+id/dropoff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dp" />
+    <Button
+        android:layout_weight="225"
+        android:background="@drawable/custom_button"
         android:text="Check List of Trips"
         android:id="@+id/checkTrip"
         android:layout_width="match_parent"

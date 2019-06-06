@@ -9,4 +9,13 @@
     <string name="carNamePass">CarNamePass</string>
     <string name="vehicle_number">Vehicle Number</string>
     <string name="vehName">VehName</string>
+    <string name="vehicles">Vehicles</string>
+    <string name="testReq">TestRequestedTrips</string>
+    <string name="testPend">TestPendingTrips</string>
+    <string name="enablePick">EnablePick</string>
+    <string name="userId">userID</string>
+    <string name="carNum">carNum</string>
+    <string name="tripID">TripID</string>
+    <string name="compTrips">CompletedTrips</string>
+    <string name="driverName">driverName</string>
 </resources>

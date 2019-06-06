@@ -4,23 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:padding="25dp"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
 
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:textSize="30dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="METROLINQ Driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <EditText
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:id="@+id/userName"
         android:hint="Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <EditText
+        android:gravity="center"
         android:id="@+id/passWord"
         android:hint="Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
+        android:background="@drawable/custom_button"
+        android:layout_marginTop="10dp"
         android:id="@+id/login"
         android:text="Login"
         android:layout_width="wrap_content"
@@ -29,14 +45,15 @@
 
 
     <TextView
+        android:background="@drawable/custom_button"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:textSize="20sp"
         android:layout_marginTop="50dp"
         android:id="@+id/vehicleNum"
         android:text="@string/vehicle_number"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-
 
 
 </LinearLayout>

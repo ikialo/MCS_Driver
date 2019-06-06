@@ -2,6 +2,7 @@ package com.MCS_Software.app.mcs_driver;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,10 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
     RecyclerView recyclerView;
     PendingAdapter adapter;
     String [] check;
+    int iterateNumber;
+
+    List<String> listCar;
+     SharedPreferences sharedPreferences;
 
     private int selectedDriverName;
 
@@ -44,7 +49,7 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference(getString(R.string.ReqTrip));
+        mDatabase = FirebaseDatabase.getInstance().getReference(getString(R.string.testPend));
         driverDB = FirebaseDatabase.getInstance().getReference(getString(R.string.driver));
         mList = new ArrayList<>();
         listDriver = new ArrayList<>();
@@ -58,70 +63,42 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
         recyclerView.setAdapter(adapter);
 
 
-
-
-
-        driverDB.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for(DataSnapshot postSnapShot: dataSnapshot.getChildren()){
-
-                    if (postSnapShot.child(getString(R.string.assigned)).getValue() != null &&
-                    postSnapShot.child(getString(R.string.assigned)).getValue().toString().equals("false")) {
-
-
-                        listDriver.add(postSnapShot.child("Name").getValue().toString());
-
-
-                    }
-
-                }
-//                int i= 0;
-//                for(String name: listDriver){
-//
-//                    Log.d("NameList", "onCreate: "+name);
-//
-//                    check[i] = name;
-//                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-
-
+        sharedPreferences = getSharedPreferences(getString(R.string.carNamePass),MODE_PRIVATE);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot postSnapShot: dataSnapshot.getChildren()){
+                mList.clear();
+
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
 
-                     for ( DataSnapshot dataSnapshot1 :  postSnapShot.child(getString(R.string.trips)).getChildren()){
+                        if (dataSnapshot1.child("car").getValue().toString().equals(sharedPreferences.getString(getString(R.string.vehName), "na"))) {
+
+
+                            mList.add(new RequestedInfo(dataSnapshot1.child("date").getValue().toString(),
+                                    dataSnapshot1.child("time").getValue().toString(),
+                                    dataSnapshot1.child("fair").getValue().toString(),
+                                    dataSnapshot1.child("destin").getValue().toString(),
+                                    dataSnapshot1.child("origin").getValue().toString(),
+                                    new LatLng((double) dataSnapshot1.child("oriLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("oriLatLng").child("longitude").getValue()),
+                                    new LatLng((double) dataSnapshot1.child("desLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("desLatLng").child("longitude").getValue())
+                                    , dataSnapshot1.child("name").getValue().toString(),
+                                    dataSnapshot1.child("userID").getValue().toString())
+                            );
+                            Log.d("dataSnapshot1", "onDataChange: " + dataSnapshot1.child("Date").getValue());
+//                         }
+                        }
+//
 
 
 
-                         mList.add(new RequestedInfo(dataSnapshot1.child("Date").getValue().toString(),
-                                 dataSnapshot1.child("Time").getValue().toString(),
-                                 dataSnapshot1.child("Fare").getValue().toString(),
-                                 dataSnapshot1.child("Destination").getValue().toString(),
-                                 dataSnapshot1.child("Origin").getValue().toString(),
-                                 new LatLng((double)dataSnapshot1.child("OriginLatLng").child("latitude").getValue(), (double)dataSnapshot1.child("OriginLatLng").child("longitude").getValue()),
-                                 new LatLng((double)dataSnapshot1.child("DestinLatLng").child("latitude").getValue(), (double)dataSnapshot1.child("DestinLatLng").child("longitude").getValue())
-                                 , postSnapShot.child("ClientInfo").child("fullName").getValue().toString()));
-                         Log.d("dataSnapshot1", "onDataChange: "+ dataSnapshot1.child("Destination").getValue());
-                     }
 
-                }
+                    }
+
+
+
                 adapter.notifyDataSetChanged();
 
             }
@@ -138,17 +115,17 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
     public void onItemClick(int position) {
         Toast.makeText(this, "Click at Position"+ position, Toast.LENGTH_SHORT).show();
 
-        check =  listDriver.toArray(new String[listDriver.size()]);
+       // check =  listCar.toArray(new String[listCar.size()]);
 
 
-        //checkBox(check);
-        onAmendClick(check);
+        checkBox(position);
+       // onAmendClick(check,position);
     }
 
 
 
 
-    public List<String> checkBox(final String [] checks){
+    public List<String> checkBox(final int pos){
 
         final List<String> genRep;
 
@@ -156,40 +133,72 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(PendingActivity.this);
-        builder.setTitle("Choose some animals");
-
-// add a checkbox list
+        builder.setTitle("Choose Option");
 
 
-
-        final boolean[] checkedItems = new boolean[checks.length]; //{false, false, false, false, false,false, false, false, false, false,false, false, false, false, false};
-        builder.setMultiChoiceItems(checks, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                // user checked or unchecked a box
-
-                checkedItems[which] = isChecked;
-
-
-            }
-        });
-
-// add OK and Cancel buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("ACCEPT", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // user clicked OK
+                Toast.makeText(PendingActivity.this, "num"+pos, Toast.LENGTH_SHORT).show();
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                int i =0;
-                for (String genRepitem: checks) {
+                       // mList.clear();
+                        int i = 0;
 
-                    if (checkedItems[i] == true){
-                        genRep.add(genRepitem);
-                        Log.d("GEN_REP", "onClick: " + genRepitem);
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+
+                            if (dataSnapshot1.child("car").getValue().toString().equals(sharedPreferences.getString(getString(R.string.vehName), "na"))) {
+
+
+                                if(pos == i){
+
+                                    String userID = dataSnapshot1.child("userID").getValue().toString();
+                                    String carNum = dataSnapshot1.child("car").getValue().toString();
+
+                                    sharedPreferences.edit().putString(getString(R.string.userId),userID).apply();
+                                    sharedPreferences.edit().putString(getString(R.string.carNum), carNum).apply();
+                                    sharedPreferences.edit().putBoolean(getString(R.string.enablePick), true).apply();
+
+                                    sharedPreferences.edit().putString(getString(R.string.tripID),dataSnapshot1.getKey()).apply();
+
+
+                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("PickUpRead/"
+                                    + userID);
+
+                                    databaseReference.child("Car").setValue(carNum);
+
+                                    startActivity(new Intent(PendingActivity.this, MapsActivity.class));
+                                }
+
+                                i++;
+                            }
+//
+
+
+
+
+                        }
+
+
+
+                        adapter.notifyDataSetChanged();
+
+                        mDatabase.removeEventListener(this);
+
                     }
-                    i++;
 
-                }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -203,7 +212,7 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
 
 
 
-    public void onAmendClick(String[] check) {
+    public void onAmendClick(String[] check, final int pos) {
 
         Toast.makeText(PendingActivity.this, "AmendClick", Toast.LENGTH_SHORT).show();
 
@@ -240,30 +249,88 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
 
 
                 Log.d("WHICH", "onClick: "+selectedDriverName);
-                final DatabaseReference dref = FirebaseDatabase.getInstance().getReference(getString(R.string.driver));
 
-
-                dref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot postSnapShot:  dataSnapshot.getChildren()){
-
-                            if (amendOption[selectedDriverName].equals(postSnapShot.child("Name").getValue().toString())){
-
-                                dref.child(postSnapShot.getKey()).child(getString(R.string.assigned)).setValue(true);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                creatPendingDB(pos, amendOption[selectedDriverName]);
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    // 11200
+    private void creatPendingDB(final int position, final String car) {
+
+        iterateNumber = 0;
+
+
+        final DatabaseReference clientNameDB = FirebaseDatabase.getInstance().getReference(getString(R.string.testReq));
+        final DatabaseReference dbpend = FirebaseDatabase.getInstance().getReference("TestPendingTrips");
+        clientNameDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                    if (position == iterateNumber) {
+
+                        RequestedInfo requestedInfo =new RequestedInfo(dataSnapshot1.child("Date").getValue().toString(),
+                                dataSnapshot1.child("Time").getValue().toString(),
+                                dataSnapshot1.child("Fare").getValue().toString(),
+                                dataSnapshot1.child("Destination").getValue().toString(),
+                                dataSnapshot1.child("Origin").getValue().toString(),
+                                new LatLng((double) dataSnapshot1.child("OriginLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("OriginLatLng").child("longitude").getValue()),
+                                new LatLng((double) dataSnapshot1.child("DestinLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("DestinLatLng").child("longitude").getValue())
+                                , dataSnapshot1.child("UserName").getValue().toString(),
+                                dataSnapshot1.child("UserId").getValue().toString(), car,"driver");
+
+
+                        String uploadId = dbpend.push().getKey();
+                        dbpend.child(uploadId).setValue(requestedInfo);
+                        clientNameDB.child(dataSnapshot1.getKey()).removeValue();
+                        //break;
+                    }
+                    iterateNumber++;
+                }
+
+                // iterateNumber = 0;
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
+    private void startTrackerService() {
+
+
+        //startService(new Intent(this, TrackingService.class));
+
+        startService(new Intent(this, AssignListenerService.class));
+
+
+
+////Notify the user that tracking has been enabled//
+
+        Toast.makeText(this, "GPS tracking enabled", Toast.LENGTH_SHORT).show();
+
+//Close MainActivity//
+
+        // finish();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        startTrackerService();
+    }
+
 }

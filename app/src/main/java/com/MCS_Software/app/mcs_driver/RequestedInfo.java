@@ -4,11 +4,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class RequestedInfo {
 
-    String name, date, time, fair,destin, origin;
+    String name, date, time, fair,destin, origin, userID, car, driver;
     LatLng oriLatLng, desLatLng;
 
 
-    public RequestedInfo(String date, String time, String fair, String destin, String origin, LatLng oriLatLng, LatLng desLatLng, String name) {
+    public RequestedInfo(String date, String time, String fair, String destin, String origin, LatLng oriLatLng, LatLng desLatLng, String name, String userID) {
         this.date = date;
         this.time = time;
         this.fair = fair;
@@ -17,6 +17,53 @@ public class RequestedInfo {
         this.oriLatLng = oriLatLng;
         this.desLatLng = desLatLng;
         this.name = name;
+        this.userID = userID;
+    }
+    public RequestedInfo(String date, String time, String fair, String destin, String origin, LatLng oriLatLng, LatLng desLatLng, String name, String userID,
+                         String car, String driver) {
+        this.date = date;
+        this.time = time;
+        this.fair = fair;
+        this.destin = destin;
+        this.origin = origin;
+        this.oriLatLng = oriLatLng;
+        this.desLatLng = desLatLng;
+        this.name = name;
+        this.userID = userID;
+        this.car =car;
+        this.driver = driver;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getCar() {
+        return car;
+    }
+
+    public void setCar(String car) {
+        this.car = car;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getTripid() {
+        return userID;
+    }
+
+    public void setTripid(String tripid) {
+        this.userID = tripid;
     }
 
     public String getName() {
