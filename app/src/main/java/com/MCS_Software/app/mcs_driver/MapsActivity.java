@@ -178,29 +178,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        final  LatLng sydney = new LatLng(-9.4438, 147.1803);
 
 
-        DatabaseReference currentLocation = FirebaseDatabase.getInstance().
-                getReference("Car Location/"+ sp_tripInfo.getString(getString(R.string.vehName), "NA"));
 
+       centerDriverOnMap();
 
-
-
-        currentLocation.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
-                        (double) dataSnapshot.child("latitude").getValue(),
-                        (double) dataSnapshot.child("longitude").getValue()
-
-                )));
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
 
@@ -209,10 +189,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (!tripId.equals("tripid")){
 
+
             final DatabaseReference dbref1 = FirebaseDatabase
                     .getInstance().getReference(getString(R.string.testPend)+"/"+tripId);
 
 
+            // enable origin marker to be shown in the the client app pending
             dbref1.child("showOriInClient").setValue(true);
 
             Log.d("Test Trip ID", "onCreate: "+ tripId);
@@ -261,7 +243,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void centerDriverOnMap() {
+        DatabaseReference currentLocation = FirebaseDatabase.getInstance().
+                getReference("Car Location/"+ sp_tripInfo.getString(getString(R.string.vehName), "NA"));
 
+
+
+
+        currentLocation.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                        (double) dataSnapshot.child("latitude").getValue(),
+                        (double) dataSnapshot.child("longitude").getValue()
+
+                )));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     @Override

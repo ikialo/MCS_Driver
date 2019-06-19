@@ -89,16 +89,12 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
                             );
                             Log.d("dataSnapshot1", "onDataChange: " + dataSnapshot1.child("Date").getValue());
 //                         }
+
                         }
-//
-
-
-
 
                     }
 
-
-
+                mDatabase.removeEventListener(this);
                 adapter.notifyDataSetChanged();
 
             }
@@ -170,25 +166,20 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
                                     + userID);
 
                                     databaseReference.child("Car").setValue(carNum);
+                                   // mDatabase.removeEventListener(this);
 
+
+                                    mDatabase.removeEventListener(this);
                                     startActivity(new Intent(PendingActivity.this, MapsActivity.class));
+                                    break;
+
                                 }
 
                                 i++;
                             }
-//
-
-
-
 
                         }
-
-
-
                         adapter.notifyDataSetChanged();
-
-                        mDatabase.removeEventListener(this);
-
                     }
 
                     @Override
@@ -211,99 +202,99 @@ public class PendingActivity extends AppCompatActivity implements PendingAdapter
     }
 
 
-
-    public void onAmendClick(String[] check, final int pos) {
-
-        Toast.makeText(PendingActivity.this, "AmendClick", Toast.LENGTH_SHORT).show();
-
-        final String [] amendOption = check;
-
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(PendingActivity.this)  ;
-        builder.setCancelable(true);
-        builder.setSingleChoiceItems(amendOption, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, final int which) {
-
-                Toast.makeText(PendingActivity.this, amendOption[which], Toast.LENGTH_SHORT).show();
-
-                selectedDriverName = which;
-
-             //   dialog.dismiss();
-            }
-        });
-
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(PendingActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-
-        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, final int which) {
-
-
-                Log.d("WHICH", "onClick: "+selectedDriverName);
-
-                creatPendingDB(pos, amendOption[selectedDriverName]);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+//
+//    public void onAmendClick(String[] check, final int pos) {
+//
+//        Toast.makeText(PendingActivity.this, "AmendClick", Toast.LENGTH_SHORT).show();
+//
+//        final String [] amendOption = check;
+//
+//
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(PendingActivity.this)  ;
+//        builder.setCancelable(true);
+//        builder.setSingleChoiceItems(amendOption, -1, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, final int which) {
+//
+//                Toast.makeText(PendingActivity.this, amendOption[which], Toast.LENGTH_SHORT).show();
+//
+//                selectedDriverName = which;
+//
+//             //   dialog.dismiss();
+//            }
+//        });
+//
+//        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Toast.makeText(PendingActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+//
+//
+//            }
+//        });
+//
+//        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, final int which) {
+//
+//
+//                Log.d("WHICH", "onClick: "+selectedDriverName);
+//
+//                creatPendingDB(pos, amendOption[selectedDriverName]);
+//            }
+//        });
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
 
     // 11200
-    private void creatPendingDB(final int position, final String car) {
-
-        iterateNumber = 0;
-
-
-        final DatabaseReference clientNameDB = FirebaseDatabase.getInstance().getReference(getString(R.string.testReq));
-        final DatabaseReference dbpend = FirebaseDatabase.getInstance().getReference("TestPendingTrips");
-        clientNameDB.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-
-                    if (position == iterateNumber) {
-
-                        RequestedInfo requestedInfo =new RequestedInfo(dataSnapshot1.child("Date").getValue().toString(),
-                                dataSnapshot1.child("Time").getValue().toString(),
-                                dataSnapshot1.child("Fare").getValue().toString(),
-                                dataSnapshot1.child("Destination").getValue().toString(),
-                                dataSnapshot1.child("Origin").getValue().toString(),
-                                new LatLng((double) dataSnapshot1.child("OriginLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("OriginLatLng").child("longitude").getValue()),
-                                new LatLng((double) dataSnapshot1.child("DestinLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("DestinLatLng").child("longitude").getValue())
-                                , dataSnapshot1.child("UserName").getValue().toString(),
-                                dataSnapshot1.child("UserId").getValue().toString(), car,"driver");
-
-
-                        String uploadId = dbpend.push().getKey();
-                        dbpend.child(uploadId).setValue(requestedInfo);
-                        clientNameDB.child(dataSnapshot1.getKey()).removeValue();
-                        //break;
-                    }
-                    iterateNumber++;
-                }
-
-                // iterateNumber = 0;
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void creatPendingDB(final int position, final String car) {
+//
+//        iterateNumber = 0;
+//
+//
+//        final DatabaseReference clientNameDB = FirebaseDatabase.getInstance().getReference(getString(R.string.testReq));
+//        final DatabaseReference dbpend = FirebaseDatabase.getInstance().getReference("TestPendingTrips");
+//        clientNameDB.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//
+//                    if (position == iterateNumber) {
+//
+//                        RequestedInfo requestedInfo =new RequestedInfo(dataSnapshot1.child("Date").getValue().toString(),
+//                                dataSnapshot1.child("Time").getValue().toString(),
+//                                dataSnapshot1.child("Fare").getValue().toString(),
+//                                dataSnapshot1.child("Destination").getValue().toString(),
+//                                dataSnapshot1.child("Origin").getValue().toString(),
+//                                new LatLng((double) dataSnapshot1.child("OriginLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("OriginLatLng").child("longitude").getValue()),
+//                                new LatLng((double) dataSnapshot1.child("DestinLatLng").child("latitude").getValue(), (double) dataSnapshot1.child("DestinLatLng").child("longitude").getValue())
+//                                , dataSnapshot1.child("UserName").getValue().toString(),
+//                                dataSnapshot1.child("UserId").getValue().toString(), car,"driver");
+//
+//
+//                        String uploadId = dbpend.push().getKey();
+//                        dbpend.child(uploadId).setValue(requestedInfo);
+//                        clientNameDB.child(dataSnapshot1.getKey()).removeValue();
+//                        //break;
+//                    }
+//                    iterateNumber++;
+//                }
+//
+//                // iterateNumber = 0;
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 
 
